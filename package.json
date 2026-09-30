@@ -1,0 +1,15 @@
+{
+  "name": "calc-hub",
+  "version": "1.0.0",
+  "description": "Hub local de aplicativos de cálculo de engenharia (PEVAL e futuros apps)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "setup": "node setup-password.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0"
+  }
+}

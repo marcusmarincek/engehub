@@ -1,0 +1,65 @@
+{
+  "appId": "peval",
+  "version": 1,
+  "name": "26XXXXXX-AGT-DME560A",
+  "savedAt": "2026-09-22T02:36:58.760Z",
+  "state": {
+    "Pvb": 21.61,
+    "Tv": 300,
+    "Pab": 2.48,
+    "gama": 1.3,
+    "DN": 250,
+    "rot": 6000,
+    "padf": "N",
+    "Hstmax": 40,
+    "GstRef": 71500,
+    "PotstRef": 6281,
+    "Vv": 0.1156105,
+    "tipo": "DME560A",
+    "os": "",
+    "cliente": "AGT-BR",
+    "valves": [
+      {
+        "Gst": null,
+        "Pzst": null,
+        "Potst": null,
+        "Hst": 26,
+        "Fmin": 6372,
+        "D1": 186.5,
+        "D2": 189.5,
+        "R": 0.5,
+        "Dhas": 20,
+        "Di": 70,
+        "ns": 1,
+        "alfar": [
+          12.5
+        ],
+        "pr": [
+          22.5
+        ]
+      },
+      {
+        "Gst": 71500,
+        "Pzst": 12.14,
+        "Potst": 6280,
+        "Hst": 40,
+        "Fmin": 1170,
+        "D1": 111.5,
+        "D2": 115,
+        "R": 0.5,
+        "Dhas": 20,
+        "Di": 50,
+        "ns": 1,
+        "alfar": [
+          13
+        ],
+        "pr": [
+          14.5
+        ]
+      }
+    ],
+    "GstTotal": 71500,
+    "PzstTotal": 12.1,
+    "PotstTotal": 6280
+  }
+}

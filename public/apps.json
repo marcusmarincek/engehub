@@ -1,0 +1,44 @@
+[
+  {
+    "id": "peval",
+    "name": "PEVAL — Válvulas de Regulagem",
+    "description": "Perfil geométrico e desempenho do conjunto de válvulas de regulagem de turbinas a vapor.",
+    "path": "/apps/peval/",
+    "icon": "⚙️"
+  },
+  {
+    "id": "steampath",
+    "name": "STEAMPATH",
+    "description": "Linha de expansão multiestágio de turbina a vapor — energia, triângulos de velocidade, perdas, continuidade, convergência e empuxo axial.",
+    "path": "/apps/steampath/",
+    "icon": "🌀"
+  },
+  {
+    "id": "ftmm",
+    "name": "Conversor Pés/Polegadas ↔ mm",
+    "description": "Conversão rápida entre pés/polegadas (com frações) e milímetros, com lista salvável de medidas de um desenho.",
+    "path": "/apps/ftmm/",
+    "icon": "📐"
+  },
+  {
+    "id": "pontaeixo",
+    "name": "Ponta de Eixo — Fadiga (Shigley)",
+    "description": "Dimensionamento de ponta de eixo por fadiga (DE-Goodman/Gerber/ASME-Elíptico/Soderberg), com concentração de tensão (Neuber, Tabela 7-1), verificação estática e comparação com o método simplificado por torção pura.",
+    "path": "/apps/pontaeixo/",
+    "icon": "🔩"
+  },
+  { 
+    "id": "ciclovap",
+    "name": "CICLOVAP",
+    "description": "Balanço térmico de ciclos a vapor: fluxograma, diagramas T-s/h-s e curvas de eficiência",
+    "path": "/apps/ciclovap/",
+    "icon": "♨️"
+  },
+  {
+    "id": "rotordin",
+    "name": "ROTORDIN",
+    "description": "Rotordinâmica lateral: Campbell, modos, desbalanceamento ISO/API, estabilidade e mancais hidrodinâmicos",
+    "path": "/apps/rotordin/",
+    "icon": "🌀"
+  }
+]

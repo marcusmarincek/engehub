@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CICLOVAP · Hub TGM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Mesma tag de Chart.js usada pelos outros apps do hub (conferir a versão no index.html do PEVAL) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<style>
+/* ---- Tokens do hub (tema escuro padrão; claro via data-theme="light") ---- */
+:root {
+  --bg: #14181D; --panel: #1A1F25; --panel2: #20262D; --line: #2C343C; --grid: #232A31;
+  --text: #E4E8EC; --muted: #8B96A1;
+  --brass: #10B6B6; --brass-dim: #0C8A8A; --brass-text: #10B6B6;
+  --blue: #5AA9E6;
+  --steam: #F07B62; --water: #5AA9E6; --mix: #B494E0;
+  --warn: #E8B454; --err: #F07B62;
+  --node: #1D2329; --tag: rgba(29,35,41,.94);
+  --s1: #5AA9E6; --s2: #F07B62; --s3: #6CC393; --s4: #E8B454; --s5: #B494E0; --s6: #10B6B6;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #F3F5F7; --panel: #FFFFFF; --panel2: #F7F9FA; --line: #D4DAE0; --grid: #E6EAEE;
+  --text: #1A2128; --muted: #5B6773;
+  --brass: #10B6B6; --brass-dim: #0C8A8A; --brass-text: #0C8A8A;
+  --blue: #1C64A8;
+  --steam: #B83A26; --water: #1C64A8; --mix: #6E4A9E;
+  --warn: #9A6200; --err: #B83A26;
+  --node: #FFFFFF; --tag: rgba(255,255,255,.94);
+  --s1: #1C64A8; --s2: #B83A26; --s3: #2E7D4F; --s4: #A86A00; --s5: #6E4A9E; --s6: #0C8A8A;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14.5px/1.45 var(--sans); display: flex; flex-direction: column; overflow: hidden; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+/* ---- hubnav (barra do hub, igual em todos os apps) ---- */
+.hubnav { display: flex; align-items: center; gap: 10px; padding: 7px 14px; background: var(--panel); border-bottom: 1px solid var(--line); flex: 0 0 auto; flex-wrap: wrap; }
+.hubnav .hub-back { color: var(--muted); text-decoration: none; font-weight: 500; white-space: nowrap; }
+.hubnav .hub-back:hover { color: var(--brass); }
+.hubnav .proj { display: flex; align-items: center; gap: 8px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel2); min-width: 0; }
+.hubnav .proj-label { color: var(--muted); font-size: 12.5px; }
+.hubnav .proj-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 32ch; }
+.hubnav .spacer { flex: 1; }
+.hubnav .user { color: var(--muted); font-size: 13.5px; white-space: nowrap; }
+.btn { border: 1px solid var(--line); background: var(--panel2); border-radius: 6px; padding: 5px 11px; font-size: 13.5px; white-space: nowrap; }
+.btn:hover { border-color: var(--brass-dim); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn-primary { background: var(--brass); border-color: var(--brass); color: #06201F; font-weight: 600; }
+.btn-primary:hover { background: var(--brass-dim); border-color: var(--brass-dim); color: #fff; }
+.icon-btn { border: 1px solid var(--line); background: var(--panel2); border-radius: 6px; padding: 3px 8px; font-size: 15px; line-height: 1.2; }
+
+/* ---- barra do app ---- */
+.apptools { display: flex; align-items: center; gap: 10px; padding: 7px 14px; border-bottom: 1px solid var(--line); flex: 0 0 auto; flex-wrap: wrap; }
+.brand { display: flex; align-items: baseline; gap: 10px; margin-right: auto; }
+.brand h1 { margin: 0; font: 600 17px var(--sans); letter-spacing: .04em; color: var(--brass-text); }
+.brand span { color: var(--muted); font-size: 13px; }
+.apptools select { border: 1px solid var(--line); background: var(--panel2); border-radius: 6px; padding: 4px 8px; font-size: 13.5px; max-width: 190px; }
+.chk { display: inline-flex; gap: 6px; align-items: center; font-size: 13.5px; color: var(--muted); white-space: nowrap; }
+.chk input { accent-color: var(--brass); }
+.status { font: 500 13px var(--mono); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 0 1 auto; }
+.status.ok { color: var(--brass-text); } .status.bad { color: var(--err); }
+
+/* ---- área de trabalho: paleta | abas | inspetor ---- */
+#app.workspace { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 206px minmax(0, 1fr) 340px; }
+.pal { border-right: 1px solid var(--line); background: var(--panel); overflow-y: auto; padding: 12px 10px; }
+.pal h2, .field-group h2 { font: 600 12.5px var(--sans); color: var(--muted); margin: 0 0 8px; letter-spacing: .02em; }
+.pal-list { display: grid; gap: 3px; }
+.pal-item { display: flex; align-items: center; gap: 8px; padding: 5px 6px; border: 1px solid transparent; border-radius: 6px; background: none; text-align: left; font-size: 13.5px; touch-action: none; user-select: none; }
+.pal-item:hover { border-color: var(--line); background: var(--panel2); }
+.pal-item svg { flex: 0 0 36px; height: 28px; }
+.pal .hint { margin-top: 12px; }
+
+.center { display: flex; flex-direction: column; min-width: 0; min-height: 0; position: relative; }
+.tabs { display: flex; gap: 2px; padding: 0 10px; border-bottom: 1px solid var(--line); background: var(--panel); flex: 0 0 auto; overflow-x: auto; }
+.tab { border: 0; background: none; padding: 8px 12px 7px; font-size: 14px; color: var(--muted); border-bottom: 2px solid transparent; white-space: nowrap; }
+.tab.active { color: var(--text); border-bottom-color: var(--brass); font-weight: 600; }
+.panel { flex: 1 1 auto; min-height: 0; position: relative; display: flex; flex-direction: column; }
+
+/* fluxograma */
+#cv { flex: 1 1 auto; width: 100%; min-height: 0; display: block; touch-action: none; user-select: none; background: var(--bg); }
+#cv.panning { cursor: grabbing; }
+.grid-minor { stroke: var(--grid); stroke-width: 1; }
+.node { cursor: move; }
+.node .body { fill: var(--node); stroke: var(--text); stroke-width: 1.5; stroke-linejoin: round; }
+.node .det { fill: none; stroke: var(--text); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.node .solid { fill: var(--text); }
+.node .flame { fill: var(--steam); opacity: .85; }
+.node .hit { fill: transparent; }
+.node .nlabel { font: 500 12px var(--sans); fill: var(--text); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; }
+.node.sel .selbox { stroke: var(--brass); stroke-width: 2; fill: none; stroke-dasharray: 5 3; }
+.node.haserr .body { stroke: var(--err); stroke-width: 2.2; }
+.port { cursor: crosshair; }
+.port circle.pc { stroke-width: 2; }
+.port.out circle.pc { stroke: var(--bg); }
+.port.in circle.pc { fill: var(--bg); }
+.port .ph { fill: transparent; }
+.lnk { fill: none; stroke-width: 2.1; }
+.lnk-hit { fill: none; stroke: transparent; stroke-width: 14; cursor: pointer; }
+.lnk.sel { stroke-width: 4; }
+.lnk.stale { stroke-dasharray: 6 4; }
+.tmp { fill: none; stroke: var(--brass); stroke-width: 2; stroke-dasharray: 5 4; pointer-events: none; }
+.tag { cursor: pointer; }
+.tag rect { fill: var(--tag); stroke: var(--line); }
+.tag text { font: 400 9.5px var(--mono); fill: var(--text); }
+.tag .tm { font-weight: 600; }
+.tag .tn { fill: var(--brass); } .tag .tnt { fill: #06201F; font: 600 9.5px var(--mono); }
+.stale-tags .tag { opacity: .45; }
+.legend { position: absolute; left: 12px; bottom: 12px; display: flex; gap: 12px; font-size: 12.5px; color: var(--muted); background: var(--tag); border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; pointer-events: none; }
+.legend i { display: inline-block; width: 16px; height: 3px; vertical-align: middle; margin-right: 5px; border-radius: 2px; }
+.zoom { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 4px; }
+.empty-state { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; pointer-events: none; }
+.empty-card { pointer-events: auto; max-width: 560px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 22px 24px; }
+.empty-card h2 { margin: 0 0 8px; font: 600 18px var(--sans); }
+.empty-card p { margin: 0 0 10px; color: var(--muted); }
+.empty-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+
+/* diagramas e curvas */
+.vbar { display: flex; gap: 14px; align-items: center; padding: 8px 12px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.segb { border: 0; background: var(--panel2); padding: 4px 12px; font-size: 13.5px; }
+.segb + .segb { border-left: 1px solid var(--line); }
+.segb[aria-pressed="true"] { background: var(--brass); color: #06201F; font-weight: 600; }
+.readout { margin-left: auto; font: 13px var(--mono); color: var(--muted); white-space: pre; }
+.chartbox { flex: 1 1 auto; position: relative; min-height: 240px; padding: 8px 12px 10px 6px; }
+.chartin { position: absolute; inset: 8px 12px 10px 6px; }
+.pmsg { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--muted); padding: 20px; pointer-events: none; }
+.cctrl { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px 10px; padding: 10px 12px; border-bottom: 1px solid var(--line); align-items: end; }
+.cf { display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; color: var(--muted); min-width: 0; }
+.cf input, .cf select { border: 1px solid var(--line); background: var(--panel2); border-radius: 5px; padding: 4px 6px; font-size: 13.5px; color: var(--text); min-width: 0; }
+.cf input { font-family: var(--mono); }
+.cf.c3 { grid-column: span 3; } .cf.c2 { grid-column: span 2; }
+.cf.act .btn { width: 100%; white-space: normal; line-height: 1.2; }
+.cstat { font-size: 13px; color: var(--muted); padding: 6px 14px 0; min-height: 24px; }
+.ctable { flex: 0 0 auto; max-height: 30%; overflow: auto; border-top: 1px solid var(--line); padding: 8px 12px 12px; }
+.table-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 10px; }
+.hint-inline { color: var(--muted); font-size: 13px; }
+.table-scroll { overflow-x: auto; }
+table { border-collapse: collapse; }
+.ctable th { text-align: right; font-weight: 600; padding: 3px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; font-size: 12.5px; }
+.ctable td { text-align: right; padding: 3px 10px; font: 13px var(--mono); border-bottom: 1px solid var(--grid); }
+
+/* inspetor */
+.insp { border-left: 1px solid var(--line); background: var(--panel); overflow-y: auto; padding: 14px 16px 24px; }
+.insp-title { font: 600 17px var(--sans); margin: 0 0 2px; }
+.insp .sub { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+.field-group { margin: 0 0 16px; }
+.field { display: grid; grid-template-columns: 1fr 100px 44px; gap: 6px; align-items: center; margin-bottom: 6px; font-size: 13.5px; }
+.field.sel2 { grid-template-columns: 1fr 1.2fr; }
+.field input, .field select { width: 100%; border: 1px solid var(--line); background: var(--panel2); border-radius: 5px; padding: 4px 6px; }
+.field input { font: 13.5px var(--mono); text-align: right; }
+.field .u { color: var(--muted); font: 12px var(--mono); }
+.name-in { width: 100%; border: 1px solid transparent; background: transparent; border-radius: 5px; padding: 2px 4px; margin-left: -4px; font: 600 17px var(--sans); }
+.name-in:hover, .name-in:focus { border-color: var(--line); background: var(--panel2); }
+table.kv { width: 100%; font-size: 13.5px; }
+table.kv td { padding: 4px 0; border-bottom: 1px solid var(--line); vertical-align: baseline; }
+table.kv td.v { text-align: right; font: 13.5px var(--mono); white-space: nowrap; padding-left: 10px; }
+table.kv td.v small { color: var(--muted); font-size: 11.5px; margin-left: 4px; }
+table.kv tr.key td { font-weight: 600; }
+table.kv tr.key td.v { color: var(--brass-text); }
+.hint { font-size: 12.5px; color: var(--muted); margin: 6px 0 12px; }
+.ports { padding: 0; list-style: none; margin: 0; }
+.ports li { font-size: 13px; margin-bottom: 3px; }
+.ports b { font-weight: 500; }
+.ports .free { color: var(--muted); } .ports .miss { color: var(--err); }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+.msgs { list-style: none; padding: 0; margin: 0 0 12px; }
+.notice { font-size: 13px; padding: 6px 8px 6px 10px; border-left: 3px solid var(--warn); margin-bottom: 6px; background: var(--panel2); border-radius: 0 5px 5px 0; }
+.notice-err { border-left-color: var(--err); }
+.msgs li[data-c] { cursor: pointer; }
+.row-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* diálogo de arquivos */
+dialog.fb { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--text); width: min(620px, 94vw); padding: 16px 18px; }
+dialog.fb::backdrop { background: rgba(0,0,0,.5); }
+.fb h3 { margin: 0 0 8px; font: 600 16px var(--sans); }
+.fb-path { display: flex; flex-wrap: wrap; gap: 2px; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.crumb { border: 0; background: none; padding: 2px 4px; border-radius: 4px; color: var(--brass-text); }
+.fb-list { border: 1px solid var(--line); border-radius: 6px; height: 300px; overflow-y: auto; padding: 4px; background: var(--panel2); }
+.fb-item { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 5px 8px; border-radius: 4px; font: 13px var(--mono); }
+.fb-item:hover { background: var(--line); }
+.fb-item.sel { background: var(--brass); color: #06201F; }
+.fb-empty { color: var(--muted); padding: 10px; font-size: 13px; }
+.fb-row { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+.fb-row input { border: 1px solid var(--line); background: var(--panel2); border-radius: 5px; padding: 5px 8px; font: 13.5px var(--mono); color: var(--text); }
+.fb-actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+.fb-actions .spacer { flex: 1; }
+
+.ghost { position: fixed; pointer-events: none; z-index: 20; opacity: .8; transform: translate(-50%, -50%); }
+.toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 7px 14px; border-radius: 6px; font-size: 13.5px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 30; max-width: 90%; }
+.toast.show { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
+@media (max-width: 1500px) { .brand span { display: none; } }
+@media (max-width: 1100px) { #app.workspace { grid-template-columns: 180px minmax(0, 1fr) 300px; } .brand span { display: none; } }
+@media (max-width: 860px) {
+  body { overflow: auto; }
+  #app.workspace { grid-template-columns: 1fr; grid-template-rows: auto 70vh auto; }
+  .pal { border-right: 0; border-bottom: 1px solid var(--line); padding: 6px 8px; overflow-x: auto; }
+  .pal h2, .pal .hint { display: none; }
+  .pal-list { display: flex; }
+  .pal-item { flex-direction: column; font-size: 11px; min-width: 70px; text-align: center; }
+  .insp { border-left: 0; border-top: 1px solid var(--line); }
+  .cctrl { grid-template-columns: 1fr 1fr; }
+  .cf.c3, .cf.c2, .cf.act { grid-column: span 2; }
+  .readout, .legend { display: none; }
+}
+</style>
+</head>
+<body>
+<script>(function(){ try { var t = localStorage.getItem('hub-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch(e){} })();</script>
+
+<header class="hubnav">
+  <a class="hub-back" href="/">← Hub</a>
+  <div class="proj"><span class="proj-label">Projeto</span><span class="proj-name" id="projName">Sem título</span></div>
+  <button class="btn" id="btnOpen">Abrir…</button>
+  <button class="btn" id="btnSave">Salvar</button>
+  <button class="btn" id="btnSaveAs">Salvar como…</button>
+  <span class="spacer"></span>
+  <button class="icon-btn" id="themeBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema">🌗</button>
+  <span class="user" id="hubUser"></span>
+  <button class="btn" id="btnLogout">Sair</button>
+</header>
+
+<div class="apptools">
+  <div class="brand"><h1>CICLOVAP</h1><span>Balanço térmico de ciclos a vapor</span></div>
+  <span class="status" id="status"></span>
+  <button class="btn btn-primary" id="bCalc">Calcular</button>
+  <label class="chk"><input type="checkbox" id="auto" checked> Automático</label>
+  <select id="lbl" aria-label="Rótulos das correntes">
+    <option value="full">Rótulos completos</option>
+    <option value="short">Rótulos resumidos</option>
+    <option value="none">Sem rótulos</option>
+  </select>
+  <select id="ex" aria-label="Carregar exemplo"><option value="">Carregar exemplo…</option></select>
+  <button class="btn" id="bUndo" title="Desfazer (Ctrl+Z)">Desfazer</button>
+  <button class="btn" id="bClear" title="Apagar todo o diagrama">Limpar</button>
+</div>
+
+<div id="app" class="workspace">
+  <aside class="pal" aria-label="Componentes">
+    <h2>Componentes</h2>
+    <div class="pal-list" id="palList"></div>
+    <div class="hint">Arraste para o diagrama ou clique para inserir. Ligue uma porta de saída (cheia) a uma de entrada (vazada) arrastando entre elas. Arraste a partir de uma porta ligada para refazer a ligação.</div>
+  </aside>
+
+  <section class="center">
+    <nav class="tabs" role="tablist" aria-label="Vistas">
+      <button class="tab active" role="tab" data-view="flow" aria-selected="true">Fluxograma</button>
+      <button class="tab" role="tab" data-view="prop" aria-selected="false">Diagrama T-s / h-s</button>
+      <button class="tab" role="tab" data-view="curves" aria-selected="false">Curvas de eficiência</button>
+    </nav>
+
+    <div class="panel" data-panel="flow">
+      <svg id="cv" aria-label="Fluxograma do ciclo">
+        <defs>
+          <pattern id="gridp" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" class="grid-minor"/></pattern>
+          <marker id="ar-vap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1L10,5L0,9z" fill="var(--steam)"/></marker>
+          <marker id="ar-mix" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1L10,5L0,9z" fill="var(--mix)"/></marker>
+          <marker id="ar-liq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1L10,5L0,9z" fill="var(--water)"/></marker>
+          <marker id="ar-idle" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1L10,5L0,9z" fill="var(--muted)"/></marker>
+        </defs>
+        <rect x="-50000" y="-50000" width="100000" height="100000" fill="url(#gridp)"/>
+        <g id="vp"><g id="gLinks"></g><g id="gNodes"></g><g id="gTags"></g><path id="tmp" class="tmp" d=""/></g>
+      </svg>
+      <div class="empty-state" id="emptyState" hidden></div>
+      <div class="legend"><span><i style="background:var(--steam)"></i>Vapor superaquecido</span><span><i style="background:var(--mix)"></i>Mistura</span><span><i style="background:var(--water)"></i>Líquido</span></div>
+      <div class="zoom">
+        <button class="btn" id="zOut" aria-label="Diminuir zoom">−</button>
+        <button class="btn" id="zFit">Ajustar</button>
+        <button class="btn" id="zIn" aria-label="Aumentar zoom">+</button>
+      </div>
+    </div>
+
+    <div class="panel" data-panel="prop" hidden>
+      <div class="vbar">
+        <div class="seg" role="group" aria-label="Tipo de diagrama">
+          <button class="segb" data-mode="Ts" aria-pressed="true">T-s</button>
+          <button class="segb" data-mode="hs" aria-pressed="false">h-s (Mollier)</button>
+        </div>
+        <label class="chk"><input type="checkbox" id="pIso" checked> Isobáricas do ciclo</label>
+        <label class="chk"><input type="checkbox" id="pNum" checked> Números das correntes</label>
+        <label class="chk"><input type="checkbox" id="pZoom"> Ampliar a região do ciclo</label>
+        <span class="readout" id="readout"></span>
+      </div>
+      <div class="chartbox"><div class="chartin"><canvas id="propCanvas" aria-label="Diagrama termodinâmico"></canvas></div><div class="pmsg" id="propMsg" hidden></div></div>
+    </div>
+
+    <div class="panel" data-panel="curves" hidden>
+      <div class="cctrl">
+        <label class="cf c3"><span>Parâmetro variado (eixo horizontal)</span><select id="cP"></select></label>
+        <label class="cf"><span>De</span><input id="cFrom" type="number" step="any" inputmode="decimal"></label>
+        <label class="cf"><span>Até</span><input id="cTo" type="number" step="any" inputmode="decimal"></label>
+        <label class="cf"><span>Pontos</span><input id="cN" type="number" min="2" max="60" step="1"></label>
+        <div class="cf act"><button class="btn btn-primary" id="cRun">Calcular curvas</button></div>
+        <label class="cf c3"><span>Família de curvas</span><select id="cF"></select></label>
+        <label class="cf c2"><span>Valores da família</span><input id="cFv" type="text" placeholder="ex.: 480; 520; 560"></label>
+        <label class="cf c2"><span>Eixo vertical</span><select id="cY"></select></label>
+      </div>
+      <div class="cstat" id="cStat"></div>
+      <div class="chartbox"><div class="chartin"><canvas id="curveCanvas" aria-label="Curvas paramétricas"></canvas></div><div class="pmsg" id="curveMsg"></div></div>
+      <div class="ctable" id="cTable"></div>
+    </div>
+  </section>
+
+  <aside class="insp" id="insp" aria-label="Propriedades e resultados"></aside>
+</div>
+
+<dialog class="fb" id="fbDlg">
+  <h3 id="fbTitle">Abrir projeto</h3>
+  <div class="fb-path" id="fbPath"></div>
+  <div class="fb-list" id="fbList"></div>
+  <label class="fb-row" id="fbSaveRow">Nome do arquivo<input id="fbName" autocomplete="off"></label>
+  <div class="fb-actions">
+    <button class="btn" id="fbMkdir">Nova pasta…</button>
+    <span class="spacer"></span>
+    <button class="btn" id="fbCancel">Cancelar</button>
+    <button class="btn btn-primary" id="fbOk">Abrir</button>
+  </div>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="steam.js"></script>
+<script src="engine.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>

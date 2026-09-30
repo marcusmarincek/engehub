@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Conversor Pés/Polegadas ↔ mm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14181D;
+  --bg-panel:#191E25;
+  --bg-raised:#1F2530;
+  --bg-input:#12161C;
+  --line:#2B3340;
+  --line-soft:#232B36;
+  --ink:#E8E6E0;
+  --ink-dim:#9AA4B2;
+  --ink-faint:#5E6A79;
+  --blue:#5B8DB8;
+  --blue-dim:#3C5C78;
+  --brass:#10B6B6;
+  --brass-dim:#0C8A8A;
+  --amber:#D97A3D;
+  --green:#6FA97A;
+  --red:#C15C4E;
+  --radius:3px;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+:root[data-theme="light"]{
+  --bg:#F4F7F7;
+  --bg-panel:#FFFFFF;
+  --bg-raised:#EDF3F3;
+  --bg-input:#FFFFFF;
+  --line:#D6E0E0;
+  --line-soft:#E6EDED;
+  --ink:#1A2323;
+  --ink-dim:#5B6B6B;
+  --ink-faint:#8A9999;
+  --blue:#2E6E8E;
+  --blue-dim:#CFE4EC;
+  --brass:#10B6B6;
+  --brass-dim:#0C8A8A;
+  --amber:#B85B26;
+  --green:#3C8A56;
+  --red:#B23D30;
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top: env(safe-area-inset-top, 0px);}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  font-size:14px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono',monospace;}
+::selection{background:var(--blue-dim);color:#fff;}
+
+.brand{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;}
+.brand .mark{
+  width:32px;height:32px;border:1.5px solid var(--brass);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;
+}
+.brand h1{font-size:18px;font-weight:600;margin:0;letter-spacing:0.01em;}
+.meta{color:var(--ink-faint);font-size:12.5px;margin:0 0 22px 42px;}
+
+.field-group{
+  background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:20px 22px 22px;margin-bottom:20px;
+}
+.field-group h2{
+  font-size:11px;text-transform:uppercase;letter-spacing:0.09em;color:var(--ink-faint);
+  font-weight:600;margin:0 0 14px;
+}
+.row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.row > div{flex:1;min-width:160px;}
+label{display:block;font-size:11.5px;color:var(--ink-dim);margin-bottom:4px;}
+label .unit{color:var(--ink-faint);}
+input[type=text],input[type=number],select{
+  width:100%;background:var(--bg-input);border:1px solid var(--line);color:var(--ink);
+  padding:9px 10px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:14px;
+}
+select{font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;}
+input:focus,select:focus{outline:none;border-color:var(--blue);}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:1px;}
+
+.tabs{display:flex;gap:2px;margin-bottom:16px;border-bottom:1px solid var(--line);}
+.tab{
+  background:none;border:none;color:var(--ink-faint);padding:9px 4px;margin-right:18px;
+  font-size:13px;font-family:'IBM Plex Sans',sans-serif;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+.tab:hover{color:var(--ink);}
+.tab.active{color:var(--ink);border-bottom-color:var(--brass);}
+.panel{display:none;}
+.panel.active{display:block;}
+
+.result-box{
+  font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:var(--brass);
+  background:var(--bg-raised);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 18px;margin-top:6px;word-break:break-word;
+}
+.hint{font-size:11.5px;color:var(--ink-faint);margin-top:8px;line-height:1.4;}
+
+.btn{
+  background:var(--bg-input);border:1px dashed var(--line);color:var(--ink-dim);
+  padding:8px 14px;border-radius:var(--radius);cursor:pointer;font-size:12.5px;
+  font-family:'IBM Plex Sans',sans-serif;
+}
+.btn:hover{border-color:var(--blue);color:var(--ink);}
+.btn-primary{
+  width:100%;background:var(--brass-dim);border:1px solid var(--brass);color:#fff;
+  padding:11px;border-radius:var(--radius);cursor:pointer;font-size:13.5px;font-weight:600;
+  font-family:'IBM Plex Sans',sans-serif;margin-top:8px;
+}
+.btn-primary:hover{background:var(--brass);}
+.icon-btn{
+  background:none;border:1px solid var(--line);color:var(--ink-faint);width:22px;height:22px;
+  border-radius:2px;cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;
+}
+.icon-btn:hover{border-color:var(--red);color:var(--red);}
+
+.notice{
+  background:rgba(16,182,182,0.08);border:1px solid var(--brass-dim);border-radius:var(--radius);
+  padding:16px;font-size:12.5px;color:var(--ink-dim);line-height:1.5;
+}
+
+table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:12.5px;}
+thead th{
+  text-align:right;font-weight:600;color:var(--ink-dim);border-bottom:1px solid var(--line);
+  padding:7px 10px;position:sticky;top:0;background:var(--bg-panel);
+}
+thead th:first-child,tbody td:first-child{text-align:left;}
+tbody td{text-align:right;padding:6px 10px;border-bottom:1px solid var(--line-soft);color:var(--ink-dim);}
+tbody tr:hover td{background:var(--bg-raised);color:var(--ink);}
+.table-scroll{max-height:420px;overflow-y:auto;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);}
+.download-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+
+::-webkit-scrollbar{width:9px;height:9px;}
+::-webkit-scrollbar-track{background:var(--bg-panel);}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:var(--blue-dim);}
+
+/* ---------- Hub nav + project toolbar (padrão genérico do hub) ---------- */
+.hubnav{
+  display:flex;align-items:center;gap:16px;
+  background:var(--bg-panel);border-bottom:1px solid var(--line);
+  padding:9px 18px;position:sticky;top:0;z-index:20;
+}
+.hubnav-back{color:var(--ink-dim);text-decoration:none;font-size:12.5px;flex-shrink:0;}
+.hubnav-back:hover{color:var(--brass);}
+.project-toolbar{flex:1;display:flex;align-items:center;gap:8px;min-width:0;}
+#project-path-display{
+  flex:1;min-width:120px;max-width:420px;background:var(--bg-input);border:1px solid var(--line);
+  color:var(--ink-dim);padding:6px 9px;border-radius:var(--radius);font-size:12px;
+}
+.btn-toolbar{
+  background:var(--bg-raised);border:1px solid var(--line);color:var(--ink-dim);
+  padding:6px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;
+  white-space:nowrap;font-family:'IBM Plex Sans',sans-serif;
+}
+.btn-toolbar:hover{border-color:var(--brass);color:var(--ink);}
+.hubnav-user{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.hubnav-user #hubnav-who{color:var(--ink-faint);font-size:11.5px;}
+#hubnav-logout{
+  background:none;border:1px solid var(--line);color:var(--ink-dim);
+  padding:5px 10px;border-radius:var(--radius);font-size:11.5px;cursor:pointer;
+}
+#hubnav-logout:hover{border-color:var(--red);color:var(--red);}
+
+.main-solo{max-width:760px;margin:0 auto;padding:26px 24px 60px;}
+
+/* ---------- File browser modal (idêntico ao padrão do hub) ---------- */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(10,12,15,0.7);
+  z-index:100;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--bg-panel);border:1px solid var(--line);border-radius:4px;
+  width:100%;max-width:520px;max-height:80vh;display:flex;flex-direction:column;
+}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);}
+.modal-head h3{margin:0;font-size:14px;}
+.modal-breadcrumb{
+  padding:8px 16px;font-size:11.5px;color:var(--ink-faint);border-bottom:1px solid var(--line-soft);
+  font-family:'IBM Plex Mono',monospace;
+}
+.modal-breadcrumb button{background:none;border:none;color:var(--blue);cursor:pointer;font-size:11.5px;font-family:'IBM Plex Mono',monospace;padding:0;}
+.modal-list{flex:1;overflow-y:auto;padding:6px 0;min-height:180px;}
+.modal-row{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;font-size:13px;}
+.modal-row:hover{background:var(--bg-raised);}
+.modal-row .ic{width:16px;text-align:center;color:var(--ink-faint);}
+.modal-row.dir .ic{color:var(--brass);}
+.modal-row.selected{background:var(--blue-dim);}
+.modal-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap;}
+.modal-footer-right{display:flex;gap:8px;flex:1;justify-content:flex-end;}
+#fb-filename{background:var(--bg-input);border:1px solid var(--line);color:var(--ink);padding:7px 9px;border-radius:var(--radius);font-size:12.5px;min-width:180px;}
+.modal-msg{padding:0 16px 12px;font-size:11.5px;color:var(--red);}
+
+@media (max-width: 900px){
+  .hubnav{flex-wrap:wrap;}
+  .project-toolbar{order:3;width:100%;}
+  .main-solo{padding:18px 16px 50px;}
+}
+</style>
+</head>
+<body>
+<script>
+(function(){ try { var t = localStorage.getItem('hub-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch(e){} })();
+</script>
+
+<div class="hubnav">
+  <a href="/hub.html" class="hubnav-back">&larr; Hub</a>
+  <div class="project-toolbar">
+    <input type="text" id="project-path-display" class="mono" readonly placeholder="(projeto não salvo)">
+    <button class="btn-toolbar" id="btn-open">Abrir…</button>
+    <button class="btn-toolbar" id="btn-save">Salvar</button>
+    <button class="btn-toolbar" id="btn-saveas">Salvar como…</button>
+  </div>
+  <div class="hubnav-user">
+    <button class="btn-toolbar" id="btn-theme" title="Alternar tema claro/escuro">🌗</button>
+    <span id="hubnav-who" class="mono"></span><button id="hubnav-logout">Sair</button>
+  </div>
+</div>
+
+<main class="main-solo">
+  <div class="brand">
+    <div class="mark">📐</div>
+    <h1>Conversor Pés/Polegadas ↔ mm</h1>
+  </div>
+  <div class="meta">Para conferência de cotas de desenhos em sistema inglês.</div>
+
+  <div class="field-group">
+    <h2>Conversor rápido</h2>
+    <div class="tabs" id="qc-tabs">
+      <button class="tab" data-dir="toMm">Pés/pol → mm</button>
+      <button class="tab" data-dir="toFt">mm → Pés/pol</button>
+    </div>
+
+    <div class="panel" id="qc-panel-toMm">
+      <div class="row">
+        <div><label>Pés</label><input type="number" id="qc-ft" step="any" placeholder="0"></div>
+        <div><label>Polegadas <span class="unit">(aceita frações)</span></label><input type="text" id="qc-in" placeholder="ex.: 3 1/2 ou 3.5"></div>
+      </div>
+      <div class="result-box mono" id="qc-mm-result">0 mm</div>
+      <div class="hint" id="qc-mm-sub">0 cm · 0 m</div>
+    </div>
+
+    <div class="panel" id="qc-panel-toFt">
+      <div class="row">
+        <div><label>Milímetros</label><input type="number" id="qc-mm" step="any" placeholder="0"></div>
+        <div><label>Arredondar para</label>
+          <select id="qc-denom">
+            <option value="2">1/2"</option>
+            <option value="4">1/4"</option>
+            <option value="8">1/8"</option>
+            <option value="16" selected>1/16"</option>
+            <option value="32">1/32"</option>
+            <option value="64">1/64"</option>
+          </select>
+        </div>
+      </div>
+      <div class="result-box mono" id="qc-ft-result">0' 0"</div>
+      <div class="hint" id="qc-ft-sub">0 pés decimais · 0 pol decimais</div>
+    </div>
+
+    <div class="row" style="margin-top:6px;">
+      <div><label>Identificação <span class="unit">(opcional)</span></label><input type="text" id="qc-label" placeholder="ex.: Diâmetro do furo A"></div>
+    </div>
+    <button class="btn-primary" id="qc-add">+ Adicionar à lista de medidas</button>
+  </div>
+
+  <div class="field-group">
+    <h2>Lista de medidas do projeto</h2>
+    <div id="rows-empty" class="notice">Nenhuma medida adicionada ainda — converta acima e clique em "Adicionar à lista", ou abra um projeto salvo com <strong>Abrir…</strong> no topo.</div>
+    <div class="table-scroll" id="rows-table-wrap" style="display:none;">
+      <table>
+        <thead><tr><th>Identificação</th><th>Entrada</th><th>Resultado</th><th></th></tr></thead>
+        <tbody id="rows-tbody"></tbody>
+      </table>
+    </div>
+    <div class="download-row" id="rows-actions" style="display:none;">
+      <button class="btn" id="rows-csv">Exportar tabela (.csv)</button>
+      <button class="btn" id="rows-clear">Limpar lista</button>
+    </div>
+  </div>
+</main>
+
+<script src="engine.js"></script>
+<script src="ui.js"></script>
+
+<div class="modal-overlay" id="fb-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="fb-title">Abrir projeto</h3>
+      <button class="icon-btn" id="fb-close">&times;</button>
+    </div>
+    <div class="modal-breadcrumb" id="fb-breadcrumb"></div>
+    <div class="modal-list" id="fb-list"></div>
+    <div class="modal-footer">
+      <button class="btn" id="fb-newfolder">+ nova pasta</button>
+      <div class="modal-footer-right">
+        <input type="text" id="fb-filename" class="mono" placeholder="nome-do-projeto.json">
+        <button class="btn-primary" id="fb-confirm" style="width:auto;margin-top:0;">Confirmar</button>
+      </div>
+    </div>
+    <div class="modal-msg" id="fb-msg"></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,438 @@
+{
+  "appId": "rotordin",
+  "version": 1,
+  "name": "rotor",
+  "savedAt": "2026-09-30T13:51:59.962Z",
+  "state": {
+    "name": "",
+    "shaft": [
+      {
+        "L": 15,
+        "od": 130,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 54,
+        "od": 100,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 10,
+        "od": 100,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 70,
+        "od": 80,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 30,
+        "od": 175,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 45,
+        "od": 90,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 45,
+        "od": 90,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 12,
+        "od": 175,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 56,
+        "od": 120,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 20,
+        "od": 160,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 63.5,
+        "od": 160,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 83.5,
+        "od": 160,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 40,
+        "od": 240,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 88,
+        "od": 240,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 45,
+        "od": 240,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 30,
+        "od": 560,
+        "id": 0,
+        "od_mass": 580,
+        "id_mass": 560,
+        "material": "Aço"
+      },
+      {
+        "L": 12,
+        "od": 340,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 40,
+        "od": 220,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 38,
+        "od": 220,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 25,
+        "od": 505.8,
+        "id": 0,
+        "od_mass": 515,
+        "id_mass": 505.8,
+        "material": "Aço"
+      },
+      {
+        "L": 81,
+        "od": 220,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 25,
+        "od": 505.8,
+        "id": 0,
+        "od_mass": 515,
+        "id_mass": 505.8,
+        "material": "Aço"
+      },
+      {
+        "L": 42,
+        "od": 220,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 25,
+        "od": 505.8,
+        "id": 0,
+        "od_mass": 515,
+        "id_mass": 505,
+        "material": "Aço"
+      },
+      {
+        "L": 42,
+        "od": 220,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 25,
+        "od": 545.5,
+        "id": 0,
+        "od_mass": 560,
+        "id_mass": 545.5,
+        "material": "Aço"
+      },
+      {
+        "L": 42,
+        "od": 220,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 25,
+        "od": 552.5,
+        "id": 0,
+        "od_mass": 567,
+        "id_mass": 552.5,
+        "material": "Aço"
+      },
+      {
+        "L": 42,
+        "od": 220,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 30,
+        "od": 559.5,
+        "id": 0,
+        "od_mass": 575,
+        "id_mass": 559.5,
+        "material": "Aço"
+      },
+      {
+        "L": 12,
+        "od": 340,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 26,
+        "od": 220,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 30,
+        "od": 220,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 86,
+        "od": 160,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 66,
+        "od": 160,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 20,
+        "od": 160,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 53,
+        "od": 120,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 15,
+        "od": 185,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 45,
+        "od": 120,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 53,
+        "od": 120,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 15,
+        "od": 185,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 53,
+        "od": 120,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 101,
+        "od": 120,
+        "id": 0,
+        "od_mass": null,
+        "id_mass": null,
+        "material": "Aço"
+      },
+      {
+        "L": 69,
+        "od": 120,
+        "id": 0,
+        "od_mass": 180,
+        "id_mass": 120,
+        "material": "Aço"
+      }
+    ],
+    "disks": [],
+    "bearings": [
+      {
+        "name": "M1",
+        "node": 7,
+        "type": "Tilting pad LBP",
+        "kxx": 100000000,
+        "kyy": 100000000,
+        "kxy": 0,
+        "kyx": 0,
+        "cxx": 10000,
+        "cyy": 10000,
+        "cxy": 0,
+        "cyx": 0,
+        "D": 90,
+        "Lb": 45,
+        "Cr": 144,
+        "Cr_hot": null,
+        "T_j": null,
+        "T_h": null,
+        "alpha_b": 11.5,
+        "preload": 0,
+        "n_pads": 5,
+        "arc": 60,
+        "offset": 0,
+        "oil": "ISO VG 68",
+        "T": 50,
+        "W": null
+      },
+      {
+        "name": "M2",
+        "node": 40,
+        "type": "Tilting pad LBP",
+        "kxx": 100000000,
+        "kyy": 100000000,
+        "kxy": 0,
+        "kyx": 0,
+        "cxx": 10000,
+        "cyy": 10000,
+        "cxy": 0,
+        "cyx": 0,
+        "D": 120,
+        "Lb": 60,
+        "Cr": 192,
+        "Cr_hot": null,
+        "T_j": null,
+        "T_h": null,
+        "alpha_b": 11.5,
+        "preload": 0,
+        "n_pads": 5,
+        "arc": 60,
+        "offset": 0,
+        "oil": "ISO VG 68",
+        "T": 50,
+        "W": null
+      }
+    ],
+    "analysis": {
+      "speed_max": 8000,
+      "n_speeds": 60,
+      "n_modes": 3,
+      "op_min": 6400,
+      "op_max": 6600,
+      "mode_speed": 6500,
+      "G": 1,
+      "planes": 2,
+      "plane_A": 13,
+      "plane_B": 34,
+      "probes": "13,34",
+      "stab_node": 3,
+      "stab_Qmax": 30000000,
+      "T_mount": 20,
+      "sens_dT": 45,
+      "sens_dC": 20
+    }
+  }
+}
